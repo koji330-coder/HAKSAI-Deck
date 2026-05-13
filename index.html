@@ -18,37 +18,40 @@
     .container { padding: 16px; }
     #loading { text-align: center; padding: 40px; color: var(--text-sub); font-size: 14px; }
     
-    /* リスト部分 */
+    /* リスト部分の拡張 */
     .card-list { display: flex; flex-direction: column; gap: 12px; }
-    .card-item { background: var(--card-bg); padding: 16px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); display: flex; align-items: flex-start; cursor: pointer; transition: transform 0.1s; }
+    .card-item { background: var(--card-bg); padding: 16px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); cursor: pointer; transition: transform 0.1s; }
     .card-item:active { transform: scale(0.98); }
+    .card-top { display: flex; align-items: flex-start; margin-bottom: 10px; }
     .card-emoji { font-size: 32px; margin-right: 16px; line-height: 1; }
     .card-info { flex-grow: 1; min-width: 0; }
-    .card-title { font-weight: bold; margin: 0 0 6px 0; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .card-summary { font-size: 12px; color: var(--text-sub); margin: 0 0 8px 0; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .card-title { font-weight: bold; margin: 0 0 4px 0; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .card-summary { font-size: 12px; color: var(--text-sub); margin: 0; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .card-score { font-size: 18px; font-weight: 900; color: var(--primary); text-align: center; min-width: 40px; }
+    .card-score span { font-size: 10px; display: block; color: var(--text-sub); font-weight: normal; }
     
-    /* バッジ */
-    .status-badge { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: bold; text-transform: uppercase; }
+    /* バッジと指標エリア */
+    .card-bottom { display: flex; justify-content: space-between; align-items: flex-end; border-top: 1px dashed #eee; padding-top: 10px; }
+    .tag-container { display: flex; flex-wrap: wrap; gap: 4px; flex: 1; }
+    .tag-badge { background: #f0f4f8; color: #4a5568; padding: 3px 8px; border-radius: 4px; font-size: 10px; font-weight: bold; }
+    .status-badge { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: bold; text-transform: uppercase; margin-bottom: 6px; }
     .status-go { background: var(--status-go); color: var(--status-go-text); }
     .status-check { background: var(--status-check); color: var(--status-check-text); }
     .status-wait { background: var(--status-wait); color: var(--status-wait-text); }
+    .card-metrics-mini { font-size: 11px; color: #666; text-align: right; line-height: 1.4; }
     
-    /* フローティングボタン */
-    .fab { position: fixed; bottom: 24px; right: 24px; background: var(--primary); color: white; width: 56px; height: 56px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 28px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); border: none; cursor: pointer; z-index: 100; }
-    
-    /* モーダル共通 */
+    /* モーダル共通・詳細画面 */
     .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 200; justify-content: center; align-items: flex-end; }
     .modal-content { background: var(--card-bg); width: 100%; max-height: 90vh; border-radius: 20px 20px 0 0; padding: 24px; box-sizing: border-box; overflow-y: auto; animation: slideUp 0.3s ease-out; }
     @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-    
-    /* フォームスタイル */
+    .fab { position: fixed; bottom: 24px; right: 24px; background: var(--primary); color: white; width: 56px; height: 56px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 28px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); border: none; cursor: pointer; z-index: 100; }
     .form-group { margin-bottom: 16px; background: #fafafa; padding: 12px; border-radius: 8px; border: 1px solid var(--border-color); }
     .form-group label { display: block; font-size: 13px; font-weight: bold; margin-bottom: 8px; color: var(--text-main); }
     .form-group input[type="file"], .form-group select, .form-group input[type="text"] { width: 100%; font-size: 14px; }
     .btn-submit { background: var(--primary); color: white; border: none; padding: 14px; width: 100%; border-radius: 8px; font-size: 16px; font-weight: bold; margin-top: 16px; cursor: pointer; }
     .btn-cancel { background: transparent; color: var(--text-sub); border: none; padding: 14px; width: 100%; font-size: 14px; margin-top: 8px; cursor: pointer; }
     
-    /* 詳細画面スタイル */
+    /* 詳細エリア拡張 */
     .detail-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
     .detail-title-area h2 { margin: 0 0 8px 0; font-size: 20px; }
     .detail-metrics { display: flex; gap: 12px; margin-bottom: 20px; background: #f8f9fa; padding: 12px; border-radius: 8px; }
@@ -57,12 +60,13 @@
     .metric-lbl { font-size: 10px; color: var(--text-sub); }
     .detail-section { margin-bottom: 24px; }
     .detail-section h3 { font-size: 15px; border-bottom: 2px solid var(--border-color); padding-bottom: 6px; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
-    .check-list { list-style: none; padding: 0; margin: 0; font-size: 14px; }
-    .check-list li { margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px dashed #eee; }
+    .check-list { list-style: none; padding: 0; margin: 0; font-size: 13px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .check-list li { background: #f9f9f9; padding: 8px; border-radius: 6px; }
     .profit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 13px; }
     .profit-item { background: #f1f3f4; padding: 8px; border-radius: 4px; display: flex; justify-content: space-between;}
+    .alert-box { background: #ffebee; border-left: 4px solid #f44336; padding: 10px; font-size: 13px; margin-bottom: 12px; }
+    .idea-box { background: #e3f2fd; padding: 10px; border-radius: 6px; font-size: 13px; margin-bottom: 12px; }
     
-    /* ローディング */
     #loadingModal .modal-content { border-radius: 20px; align-self: center; width: 80%; text-align: center; padding: 40px 20px; }
     .spinner { border: 4px solid rgba(0,0,0,0.1); width: 40px; height: 40px; border-radius: 50%; border-left-color: var(--primary); animation: spin 1s linear infinite; margin: 0 auto 16px auto; }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -109,13 +113,17 @@
     <div class="modal-content">
       <div class="detail-header">
         <div class="detail-title-area">
-          <h2 id="d-title">タイトル</h2>
           <span id="d-status" class="status-badge">WAIT</span>
+          <h2 id="d-title">タイトル</h2>
         </div>
         <div style="font-size: 32px;" id="d-emoji">📦</div>
       </div>
       
       <p style="font-size:13px; color:#555; margin-top:0;" id="d-summary"></p>
+      
+      <div class="idea-box" style="background: #f3e5f5; display: none;" id="d-kw-box">
+        <b>🇨🇳 1688検索キーワード:</b> <span id="d-keywords"></span>
+      </div>
 
       <div class="detail-metrics">
         <div class="metric"><div class="metric-val" id="d-price">-</div><div class="metric-lbl">競合価格</div></div>
@@ -123,10 +131,20 @@
         <div class="metric"><div class="metric-val" id="d-reviews">-</div><div class="metric-lbl">レビュー</div></div>
       </div>
 
+      <div class="alert-box" id="d-alert-box" style="display:none;">
+        <div id="d-weakness" style="margin-bottom:8px;"></div>
+        <div id="d-risks" style="font-weight:bold; color:#b71c1c;"></div>
+      </div>
+
       <div class="detail-section">
         <h3>🕵️ 仕入れ審査官の視点</h3>
         <p style="font-size:13px; font-weight:bold; color:#d32f2f;" id="d-conf-reason"></p>
         <ul class="check-list" id="d-checks"></ul>
+        
+        <div style="background:#fffde7; padding:10px; border-radius:6px; font-size:12px; margin-top:12px;">
+          <b>📌 次の調査アクション:</b>
+          <ul style="margin: 4px 0 0 0; padding-left: 20px;" id="d-actions"></ul>
+        </div>
       </div>
 
       <div class="detail-section">
@@ -144,10 +162,12 @@
 
       <div class="detail-section">
         <h3>💡 プロデューサーの視点</h3>
-        <p style="font-size:13px; line-height:1.5;" id="d-produce-reason"></p>
-        <div style="background:#fff3e0; padding:10px; border-radius:6px; font-size:13px; margin-top:8px;">
-          <b>🔪 差別化の切り口:</b><br>
-          <span id="d-produce-diff"></span>
+        <p style="font-size:13px; font-weight:bold; color:#1565c0; margin-bottom: 4px;" id="d-verdict"></p>
+        <p style="font-size:13px; line-height:1.5; margin-top:0;" id="d-produce-reason"></p>
+        
+        <div class="idea-box">
+          <b>🔪 画像構成の切り口 (A+ / 動画等):</b>
+          <ul style="margin: 4px 0 0 0; padding-left: 20px;" id="d-produce-angles"></ul>
         </div>
       </div>
 
@@ -194,16 +214,29 @@
         if(card.status === 'go') statusClass = 'status-badge status-go';
         if(card.status === 'check') statusClass = 'status-badge status-check';
 
+        // タグバッジの生成
+        const tagsHtml = (card.tags || []).map(t => `<span class="tag-badge">${t}</span>`).join('');
+        // スコアの取得
+        const score = (card.produce && card.produce.score) ? card.produce.score : '-';
+
         item.innerHTML = `
-          <div class="card-emoji">${card.emoji || '📦'}</div>
-          <div class="card-info">
-            <h3 class="card-title">${card.title || '無題'}</h3>
-            <p class="card-summary">${card.summary || ''}</p>
-            <span class="${statusClass}">${card.status || 'wait'}</span>
+          <div class="card-top">
+            <div class="card-emoji">${card.emoji || '📦'}</div>
+            <div class="card-info">
+              <span class="${statusClass}">${card.status || 'wait'}</span>
+              <h3 class="card-title">${card.title || '無題'}</h3>
+              <p class="card-summary">${card.summary || ''}</p>
+            </div>
+            <div class="card-score">${score}<span>点/10</span></div>
+          </div>
+          <div class="card-bottom">
+            <div class="tag-container">${tagsHtml}</div>
+            <div class="card-metrics-mini">
+              <b>${card.price || '-'}</b> <br> 月販 ${card.monthly_sales || '-'}
+            </div>
           </div>
         `;
         
-        // ★ タップで詳細モーダルを開く処理をバインド
         item.onclick = () => openDetailModal(card);
         listContainer.appendChild(item);
       });
@@ -216,7 +249,7 @@
     function hideLoading() { document.getElementById('loadingModal').style.display = 'none'; }
     function closeDetailModal() { document.getElementById('detailModal').style.display = 'none'; }
 
-    // ★ 詳細モーダルにデータを流し込んで開く
+    // ★ 詳細モーダルにデータを流し込む（進化版）
     function openDetailModal(card) {
       document.getElementById('d-title').innerText = card.title || '無題';
       document.getElementById('d-summary').innerText = card.summary || '';
@@ -230,15 +263,40 @@
       document.getElementById('d-sales').innerText = card.monthly_sales || '-';
       document.getElementById('d-reviews').innerText = card.reviews || '-';
 
+      // 1688キーワード
+      if(card.supplier_keywords && card.supplier_keywords.length > 0) {
+        document.getElementById('d-kw-box').style.display = 'block';
+        document.getElementById('d-keywords').innerText = card.supplier_keywords.join(' / ');
+      } else {
+        document.getElementById('d-kw-box').style.display = 'none';
+      }
+
       // 監査結果 (audit)
       const audit = card.audit || {};
+      
+      // 弱点とリスク
+      let alertHtml = '';
+      if(card.weakness) alertHtml += `<div id="d-weakness" style="margin-bottom:8px;">💔 <b>競合の弱点:</b> ${card.weakness}</div>`;
+      if(audit.risk_flags && audit.risk_flags.length > 0) alertHtml += `<div id="d-risks" style="font-weight:bold; color:#b71c1c;">⚠️ リスク: ${audit.risk_flags.join(' / ')}</div>`;
+      
+      const alertBox = document.getElementById('d-alert-box');
+      if(alertHtml) { alertBox.innerHTML = alertHtml; alertBox.style.display = 'block'; }
+      else { alertBox.style.display = 'none'; }
+
       document.getElementById('d-conf-reason').innerText = audit.confidence_reason ? `判定理由: ${audit.confidence_reason}` : '';
       
+      // 9つのチェックリスト
       const checksUl = document.getElementById('d-checks');
       checksUl.innerHTML = '';
       (audit.checks || []).forEach(c => {
-        checksUl.innerHTML += `<li>${c.icon} <b>${c.text}</b><br><span style="color:#666; font-size:12px;">${c.val}</span></li>`;
+        let color = c.icon === '◎' ? '#1e8e3e' : c.icon === '○' ? '#f57c00' : c.icon === '✗' ? '#d32f2f' : '#666';
+        checksUl.innerHTML += `<li><span style="color:${color}; font-weight:bold;">${c.icon}</span> <b>${c.text}</b><br><span style="color:#666; font-size:11px;">${c.val}</span></li>`;
       });
+
+      // 次のアクション
+      const actionsUl = document.getElementById('d-actions');
+      actionsUl.innerHTML = '';
+      (audit.next_actions || []).forEach(a => { actionsUl.innerHTML += `<li>${a}</li>`; });
 
       // 利益 (profit)
       const profit = audit.profit || {};
@@ -250,8 +308,13 @@
 
       // プロデュース (produce)
       const produce = card.produce || {};
+      document.getElementById('d-verdict').innerText = `【結論】 ${produce.verdict || ''} (スコア: ${produce.score || '-'}点)`;
       document.getElementById('d-produce-reason').innerText = produce.reason || '特になし';
-      document.getElementById('d-produce-diff').innerText = produce.diff || '特になし';
+      
+      const anglesUl = document.getElementById('d-produce-angles');
+      anglesUl.innerHTML = '';
+      (produce.image_angles || []).forEach(a => { anglesUl.innerHTML += `<li>${a}</li>`; });
+      if(produce.diff) anglesUl.innerHTML += `<li style="color:#d32f2f; font-weight:bold; margin-top:4px;">差別化案: ${produce.diff}</li>`;
 
       document.getElementById('detailModal').style.display = 'flex';
     }
@@ -292,12 +355,10 @@
 
         const memo = { note: document.getElementById('memo_note').value };
 
-        // 1. 分析
         const analyzeRes = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ action: 'analyze', images: images, memo: memo }) });
         const analyzeJson = await analyzeRes.json();
         if (analyzeJson.status !== 'ok') throw new Error(analyzeJson.message || '分析失敗');
 
-        // 2. 保存
         const saveRes = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ action: 'saveCard', cardData: analyzeJson.data }) });
         const saveJson = await saveRes.json();
         if (saveJson.status !== 'ok') throw new Error('保存失敗');
