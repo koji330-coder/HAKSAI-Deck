@@ -6,18 +6,11 @@
   <title>HAKSAI Research Deck</title>
   <style>
     :root {
-      --primary: #1a1a1a;
-      --bg-color: #f4f7f6;
-      --card-bg: #ffffff;
-      --text-main: #333333;
-      --text-sub: #888888;
-      --border-color: #e0e0e0;
-      --status-go: #e6f4ea;
-      --status-go-text: #1e8e3e;
-      --status-check: #fff3e0;
-      --status-check-text: #f57c00;
-      --status-wait: #eeeeee;
-      --status-wait-text: #757575;
+      --primary: #1a1a1a; --bg-color: #f4f7f6; --card-bg: #ffffff;
+      --text-main: #333333; --text-sub: #888888; --border-color: #e0e0e0;
+      --status-go: #e6f4ea; --status-go-text: #1e8e3e;
+      --status-check: #fff3e0; --status-check-text: #f57c00;
+      --status-wait: #eeeeee; --status-wait-text: #757575;
     }
     body { font-family: 'Helvetica Neue', Arial, sans-serif; background-color: var(--bg-color); margin: 0; padding: 0; color: var(--text-main); padding-bottom: 100px; }
     .header { background: var(--card-bg); padding: 16px 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 10; }
@@ -25,7 +18,7 @@
     .container { padding: 16px; }
     #loading { text-align: center; padding: 40px; color: var(--text-sub); font-size: 14px; }
     
-    /* リスト部分のスタイル */
+    /* リスト部分 */
     .card-list { display: flex; flex-direction: column; gap: 12px; }
     .card-item { background: var(--card-bg); padding: 16px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); display: flex; align-items: flex-start; cursor: pointer; transition: transform 0.1s; }
     .card-item:active { transform: scale(0.98); }
@@ -33,6 +26,8 @@
     .card-info { flex-grow: 1; min-width: 0; }
     .card-title { font-weight: bold; margin: 0 0 6px 0; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .card-summary { font-size: 12px; color: var(--text-sub); margin: 0 0 8px 0; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    
+    /* バッジ */
     .status-badge { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: bold; text-transform: uppercase; }
     .status-go { background: var(--status-go); color: var(--status-go-text); }
     .status-check { background: var(--status-check); color: var(--status-check-text); }
@@ -41,22 +36,33 @@
     /* フローティングボタン */
     .fab { position: fixed; bottom: 24px; right: 24px; background: var(--primary); color: white; width: 56px; height: 56px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 28px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); border: none; cursor: pointer; z-index: 100; }
     
-    /* モーダル共通スタイル */
+    /* モーダル共通 */
     .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 200; justify-content: center; align-items: flex-end; }
     .modal-content { background: var(--card-bg); width: 100%; max-height: 90vh; border-radius: 20px 20px 0 0; padding: 24px; box-sizing: border-box; overflow-y: auto; animation: slideUp 0.3s ease-out; }
     @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
     
     /* フォームスタイル */
-    .modal-content h2 { margin: 0 0 16px 0; font-size: 18px; }
     .form-group { margin-bottom: 16px; background: #fafafa; padding: 12px; border-radius: 8px; border: 1px solid var(--border-color); }
     .form-group label { display: block; font-size: 13px; font-weight: bold; margin-bottom: 8px; color: var(--text-main); }
-    .form-group input[type="file"] { font-size: 12px; width: 100%; }
-    .form-group select, .form-group input[type="text"] { width: 100%; padding: 8px; border: 1px solid var(--border-color); border-radius: 4px; font-size: 14px; box-sizing: border-box; background: #fff;}
-    
+    .form-group input[type="file"], .form-group select, .form-group input[type="text"] { width: 100%; font-size: 14px; }
     .btn-submit { background: var(--primary); color: white; border: none; padding: 14px; width: 100%; border-radius: 8px; font-size: 16px; font-weight: bold; margin-top: 16px; cursor: pointer; }
     .btn-cancel { background: transparent; color: var(--text-sub); border: none; padding: 14px; width: 100%; font-size: 14px; margin-top: 8px; cursor: pointer; }
     
-    /* ローディング用モーダル */
+    /* 詳細画面スタイル */
+    .detail-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
+    .detail-title-area h2 { margin: 0 0 8px 0; font-size: 20px; }
+    .detail-metrics { display: flex; gap: 12px; margin-bottom: 20px; background: #f8f9fa; padding: 12px; border-radius: 8px; }
+    .metric { flex: 1; text-align: center; }
+    .metric-val { font-weight: bold; font-size: 16px; }
+    .metric-lbl { font-size: 10px; color: var(--text-sub); }
+    .detail-section { margin-bottom: 24px; }
+    .detail-section h3 { font-size: 15px; border-bottom: 2px solid var(--border-color); padding-bottom: 6px; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+    .check-list { list-style: none; padding: 0; margin: 0; font-size: 14px; }
+    .check-list li { margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px dashed #eee; }
+    .profit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 13px; }
+    .profit-item { background: #f1f3f4; padding: 8px; border-radius: 4px; display: flex; justify-content: space-between;}
+    
+    /* ローディング */
     #loadingModal .modal-content { border-radius: 20px; align-self: center; width: 80%; text-align: center; padding: 40px 20px; }
     .spinner { border: 4px solid rgba(0,0,0,0.1); width: 40px; height: 40px; border-radius: 50%; border-left-color: var(--primary); animation: spin 1s linear infinite; margin: 0 auto 16px auto; }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -77,52 +83,75 @@
 
   <div class="modal-overlay" id="inputModal">
     <div class="modal-content">
-      <h2>新規リサーチ</h2>
+      <h2 style="margin-top:0;">新規リサーチ</h2>
       
       <div class="form-group" style="border-color: #4CAF50; background: #F1F8E9;">
         <label>🛒 Amazon商品ページ (必須)</label>
         <input type="file" id="img_amazon_main" accept="image/*">
       </div>
-      
       <div class="form-group">
-        <label>⭐ レビュー画像 (オプション)</label>
-        <input type="file" id="img_review" accept="image/*">
-      </div>
-      
-      <div class="form-group">
-        <label>📢 広告欄 (オプション)</label>
-        <input type="file" id="img_ad_competitors" accept="image/*">
-      </div>
-      
-      <div class="form-group">
-        <label>📦 ラクマート (オプション)</label>
-        <input type="file" id="img_rakumart" accept="image/*">
+        <label>⭐ レビュー画像 / 📢 広告欄 / 📦 ラクマート (任意)</label>
+        <input type="file" id="img_sub1" accept="image/*" style="margin-bottom:8px;">
+        <input type="file" id="img_sub2" accept="image/*">
       </div>
 
-      <h3>気づいたこと（任意）</h3>
       <div class="form-group">
-        <label>中国品っぽい</label>
-        <select id="memo_china"><option value="不明">不明</option><option value="Yes">Yes</option><option value="No">No</option></select>
-      </div>
-      <div class="form-group">
-        <label>最近のレビューあり</label>
-        <select id="memo_recentReview"><option value="未確認">未確認</option><option value="あり">あり</option><option value="なし">なし</option></select>
-      </div>
-      <div class="form-group">
-        <label>広告競合の数</label>
-        <select id="memo_adCompetitor"><option value="未確認">未確認</option><option value="なし">なし</option><option value="少数">少数</option><option value="多数">多数</option></select>
-      </div>
-      <div class="form-group">
-        <label>月販数の目安</label>
-        <select id="memo_monthlySales"><option value="未確認">未確認</option><option value="〜50">〜50</option><option value="50〜100">50〜100</option><option value="100+">100+</option><option value="500+">500+</option></select>
-      </div>
-      <div class="form-group">
-        <label>メモ・特記事項</label>
-        <input type="text" id="memo_note" placeholder="差別化できそうなポイントなど">
+        <label>メモ・特記事項（任意）</label>
+        <input type="text" id="memo_note" placeholder="気になる点や差別化ポイントなど">
       </div>
 
       <button class="btn-submit" onclick="submitAnalysis()">AIで分析する</button>
       <button class="btn-cancel" onclick="closeInputModal()">キャンセル</button>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="detailModal">
+    <div class="modal-content">
+      <div class="detail-header">
+        <div class="detail-title-area">
+          <h2 id="d-title">タイトル</h2>
+          <span id="d-status" class="status-badge">WAIT</span>
+        </div>
+        <div style="font-size: 32px;" id="d-emoji">📦</div>
+      </div>
+      
+      <p style="font-size:13px; color:#555; margin-top:0;" id="d-summary"></p>
+
+      <div class="detail-metrics">
+        <div class="metric"><div class="metric-val" id="d-price">-</div><div class="metric-lbl">競合価格</div></div>
+        <div class="metric"><div class="metric-val" id="d-sales">-</div><div class="metric-lbl">月販数</div></div>
+        <div class="metric"><div class="metric-val" id="d-reviews">-</div><div class="metric-lbl">レビュー</div></div>
+      </div>
+
+      <div class="detail-section">
+        <h3>🕵️ 仕入れ審査官の視点</h3>
+        <p style="font-size:13px; font-weight:bold; color:#d32f2f;" id="d-conf-reason"></p>
+        <ul class="check-list" id="d-checks"></ul>
+      </div>
+
+      <div class="detail-section">
+        <h3>💰 利益シミュレーション</h3>
+        <div class="profit-grid">
+          <div class="profit-item"><span>販売価格</span><b id="p-price">-</b></div>
+          <div class="profit-item"><span>仕入原価</span><b id="p-cost">-</b></div>
+          <div class="profit-item"><span>Ama手数料</span><b id="p-amazon">-</b></div>
+          <div class="profit-item"><span>FBA費用</span><b id="p-fba">-</b></div>
+          <div class="profit-item" style="background:#e6f4ea; grid-column: 1 / -1;">
+            <span>想定純利益 (1個)</span><b id="p-net" style="color:#1e8e3e;">-</b>
+          </div>
+        </div>
+      </div>
+
+      <div class="detail-section">
+        <h3>💡 プロデューサーの視点</h3>
+        <p style="font-size:13px; line-height:1.5;" id="d-produce-reason"></p>
+        <div style="background:#fff3e0; padding:10px; border-radius:6px; font-size:13px; margin-top:8px;">
+          <b>🔪 差別化の切り口:</b><br>
+          <span id="d-produce-diff"></span>
+        </div>
+      </div>
+
+      <button class="btn-cancel" style="background:#eee; color:#333;" onclick="closeDetailModal()">閉じる</button>
     </div>
   </div>
 
@@ -137,7 +166,6 @@
   <script>
     const GAS_URL = 'https://script.google.com/macros/s/AKfycbwN9FLhuYkK3Dn-1xh38ha2LPQVfyRItpS8D59bvv63UFsKfeXq9Cgin6ky9_HIsvCn/exec';
 
-    // 起動時のデータ取得
     async function fetchCards() {
       document.getElementById('loading').style.display = 'block';
       document.getElementById('cardList').innerHTML = '';
@@ -150,7 +178,6 @@
       }
     }
 
-    // リスト描画
     function renderList(cards) {
       const listContainer = document.getElementById('cardList');
       document.getElementById('loading').style.display = 'none';
@@ -170,36 +197,77 @@
         item.innerHTML = `
           <div class="card-emoji">${card.emoji || '📦'}</div>
           <div class="card-info">
-            <h3 class="card-title">${card.title || 'タイトルなし'}</h3>
-            <p class="card-summary">${card.summary || 'サマリーなし'}</p>
+            <h3 class="card-title">${card.title || '無題'}</h3>
+            <p class="card-summary">${card.summary || ''}</p>
             <span class="${statusClass}">${card.status || 'wait'}</span>
           </div>
         `;
-        item.onclick = () => alert(`【タップされました】\n${card.title}\n\n※この詳細画面は次のステップで実装します。`);
+        
+        // ★ タップで詳細モーダルを開く処理をバインド
+        item.onclick = () => openDetailModal(card);
         listContainer.appendChild(item);
       });
     }
 
-    // モーダル制御
+    // --- モーダル制御 ---
     function openInputModal() { document.getElementById('inputModal').style.display = 'flex'; }
     function closeInputModal() { document.getElementById('inputModal').style.display = 'none'; }
     function showLoading() { document.getElementById('loadingModal').style.display = 'flex'; }
     function hideLoading() { document.getElementById('loadingModal').style.display = 'none'; }
+    function closeDetailModal() { document.getElementById('detailModal').style.display = 'none'; }
 
-    // ファイルをBase64に変換するヘルパー関数
+    // ★ 詳細モーダルにデータを流し込んで開く
+    function openDetailModal(card) {
+      document.getElementById('d-title').innerText = card.title || '無題';
+      document.getElementById('d-summary').innerText = card.summary || '';
+      document.getElementById('d-emoji').innerText = card.emoji || '📦';
+      
+      const stBadge = document.getElementById('d-status');
+      stBadge.innerText = card.status || 'wait';
+      stBadge.className = 'status-badge ' + (card.status === 'go' ? 'status-go' : card.status === 'check' ? 'status-check' : 'status-wait');
+
+      document.getElementById('d-price').innerText = card.price || '-';
+      document.getElementById('d-sales').innerText = card.monthly_sales || '-';
+      document.getElementById('d-reviews').innerText = card.reviews || '-';
+
+      // 監査結果 (audit)
+      const audit = card.audit || {};
+      document.getElementById('d-conf-reason').innerText = audit.confidence_reason ? `判定理由: ${audit.confidence_reason}` : '';
+      
+      const checksUl = document.getElementById('d-checks');
+      checksUl.innerHTML = '';
+      (audit.checks || []).forEach(c => {
+        checksUl.innerHTML += `<li>${c.icon} <b>${c.text}</b><br><span style="color:#666; font-size:12px;">${c.val}</span></li>`;
+      });
+
+      // 利益 (profit)
+      const profit = audit.profit || {};
+      document.getElementById('p-price').innerText = profit.price || '-';
+      document.getElementById('p-cost').innerText = profit.cost || '-';
+      document.getElementById('p-amazon').innerText = profit.amazon || '-';
+      document.getElementById('p-fba').innerText = profit.fba || '-';
+      document.getElementById('p-net').innerText = profit.net || '-';
+
+      // プロデュース (produce)
+      const produce = card.produce || {};
+      document.getElementById('d-produce-reason').innerText = produce.reason || '特になし';
+      document.getElementById('d-produce-diff').innerText = produce.diff || '特になし';
+
+      document.getElementById('detailModal').style.display = 'flex';
+    }
+
+    // --- 画像アップロード処理 ---
     const fileToBase64 = (file) => new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result.split(',')[1]); // "data:image/jpeg;base64,"の部分をカット
+      reader.onload = () => resolve(reader.result.split(',')[1]);
       reader.onerror = error => reject(error);
     });
 
-    // 分析の実行
     async function submitAnalysis() {
       const mainImageInput = document.getElementById('img_amazon_main');
       if (!mainImageInput.files || mainImageInput.files.length === 0) {
-        alert('Amazon商品ページの画像は必須です。');
-        return;
+        alert('Amazon商品ページの画像は必須です。'); return;
       }
 
       closeInputModal();
@@ -209,54 +277,33 @@
         const images = [];
         const inputs = [
           { id: 'img_amazon_main', role: 'amazon_main' },
-          { id: 'img_review', role: 'review' },
-          { id: 'img_ad_competitors', role: 'ad_competitors' },
-          { id: 'img_rakumart', role: 'rakumart' }
+          { id: 'img_sub1', role: 'review' },
+          { id: 'img_sub2', role: 'ad_competitors' }
         ];
 
-        // 画像の読み込み処理
         for (const input of inputs) {
           const fileElement = document.getElementById(input.id);
-          if (fileElement.files && fileElement.files.length > 0) {
+          if (fileElement && fileElement.files && fileElement.files.length > 0) {
             const file = fileElement.files[0];
             const base64Str = await fileToBase64(file);
             images.push({ base64: base64Str, mimeType: file.type, role: input.role });
           }
         }
 
-        // メモの取得
-        const memo = {
-          china: document.getElementById('memo_china').value,
-          recentReview: document.getElementById('memo_recentReview').value,
-          adCompetitor: document.getElementById('memo_adCompetitor').value,
-          monthlySales: document.getElementById('memo_monthlySales').value,
-          note: document.getElementById('memo_note').value
-        };
+        const memo = { note: document.getElementById('memo_note').value };
 
-        // 1. Geminiへ分析リクエスト (POST)
-        const analyzeRes = await fetch(GAS_URL, {
-          method: 'POST',
-          body: JSON.stringify({ action: 'analyze', images: images, memo: memo })
-        });
+        // 1. 分析
+        const analyzeRes = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ action: 'analyze', images: images, memo: memo }) });
         const analyzeJson = await analyzeRes.json();
-        
-        if (analyzeJson.status !== 'ok') throw new Error(analyzeJson.message || '分析に失敗しました');
+        if (analyzeJson.status !== 'ok') throw new Error(analyzeJson.message || '分析失敗');
 
-        // 2. 結果をスプレッドシートに保存 (POST)
-        const saveRes = await fetch(GAS_URL, {
-          method: 'POST',
-          body: JSON.stringify({ action: 'saveCard', cardData: analyzeJson.data })
-        });
+        // 2. 保存
+        const saveRes = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ action: 'saveCard', cardData: analyzeJson.data }) });
         const saveJson = await saveRes.json();
+        if (saveJson.status !== 'ok') throw new Error('保存失敗');
 
-        if (saveJson.status !== 'ok') throw new Error('データの保存に失敗しました');
-
-        // 完了したらリストを再取得して画面更新
         hideLoading();
-        // フォームのリセット
-        document.querySelectorAll('input[type="file"]').forEach(el => el.value = '');
-        document.getElementById('memo_note').value = '';
-        
+        document.querySelectorAll('input[type="file"], input[type="text"]').forEach(el => el.value = '');
         fetchCards(); 
 
       } catch (error) {
@@ -265,9 +312,7 @@
       }
     }
 
-    // 初期起動
     fetchCards();
   </script>
-
 </body>
 </html>
