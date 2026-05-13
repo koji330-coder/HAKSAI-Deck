@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>HAKSAI Research Deck</title>
+  <title>HAKSAI Research Deck v3.6</title>
   <style>
     :root {
       --primary: #1a1a1a; --bg-color: #f4f7f6; --card-bg: #ffffff;
@@ -21,7 +21,6 @@
     .tab.active { color: var(--tab-active); border-bottom-color: var(--tab-active); }
     
     .container { padding: 16px; }
-    #loading { text-align: center; padding: 40px; color: var(--text-sub); font-size: 14px; }
     
     /* カードUI（表面） */
     .card-item { background: var(--card-bg); padding: 16px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); cursor: pointer; position: relative; margin-bottom: 12px; transition: transform 0.1s; }
@@ -70,14 +69,13 @@
   <div class="header">
     <h1>HAKSAI Deck</h1>
     <div class="tabs">
-      <div class="tab active" onclick="switchTab('active')">🔍 リサーチ</div>
-      <div class="tab" onclick="switchTab('launched')">🚀 ポートフォリオ</div>
-      <div class="tab" onclick="switchTab('archived')">📁 アーカイブ</div>
+      <div class="tab active" onclick="switchTab('active', this)">🔍 リサーチ</div>
+      <div class="tab" onclick="switchTab('launched', this)">🚀 ポートフォリオ</div>
+      <div class="tab" onclick="switchTab('archived', this)">📁 アーカイブ</div>
     </div>
   </div>
   
   <div class="container">
-    <div id="loading">データを読み込み中...</div>
     <div class="card-list" id="cardList"></div>
   </div>
 
@@ -116,11 +114,8 @@
       <div class="persona-section" style="border-left: 4px solid #546e7a;">
         <div class="persona-title">🕵️ 冷静な仕入れ審査官</div>
         <div id="d-audit-comment" class="persona-commentary"></div>
-        
         <div id="d-alert-box" style="margin-top:12px; padding:10px; background:#ffebee; border-radius:6px; font-size:12px; display:none;"></div>
-        
         <ul id="d-checks" style="list-style:none; padding:0; margin:12px 0 0 0; font-size:12px; display:grid; grid-template-columns:1fr 1fr; gap:6px;"></ul>
-        
         <div style="margin-top:12px; font-size:12px; background:#fffde7; padding:10px; border-radius:6px;">
           <b>📌 次の調査アクション:</b>
           <ul id="d-actions" style="margin:4px 0 0 0; padding-left:18px;"></ul>
@@ -130,11 +125,9 @@
       <div class="persona-section" style="border-left: 4px solid #1e88e5; background: #e3f2fd;">
         <div class="persona-title">💡 編集プロデューサー</div>
         <div id="d-produce-comment" class="persona-commentary"></div>
-        
         <div style="margin-top:12px; font-size:13px; color:#d32f2f; font-weight:bold;">
           🔪 差別化の軸: <span id="d-produce-diff"></span>
         </div>
-        
         <div style="margin-top:8px; font-size:12px;">
           <b>📸 画像構成案:</b>
           <ul id="d-produce-angles" style="margin:4px 0 0 0; padding-left:18px;"></ul>
@@ -200,13 +193,12 @@
         const res = await fetch(`${GAS_URL}?action=getCards`);
         const json = await res.json();
         if(json.status === 'ok') { allCards = json.cards; renderList(); }
-      } catch(e) { alert('通信失敗'); } finally { hideLoading(); }
+        else { alert('データの取得に失敗しました。'); }
+      } catch(e) { alert('通信に失敗しました。'); } 
+      finally { hideLoading(); }
     }
 
     function renderList() {
-      // ★ローディングの文字を確実に消す処理
-      document.getElementById('loading').style.display = 'none';
-
       const container = document.getElementById('cardList');
       container.innerHTML = '';
       let filtered = allCards.filter(c => {
@@ -216,7 +208,10 @@
       });
 
       if (filtered.length === 0) {
-        container.innerHTML = '<div style="text-align:center; color:#888; padding: 40px;">データがありません。</div>';
+        let msg = currentTab === 'active' ? 'リサーチ中のデータがありません。' : 
+                  currentTab === 'launched' ? '商品化済みのデータはありません。' : 
+                  'アーカイブされたデータはありません。';
+        container.innerHTML = `<div style="text-align:center; color:#888; padding: 40px; font-size:14px;">${msg}</div>`;
         return;
       }
 
@@ -250,6 +245,15 @@
       });
     }
 
+    // ★ フリーズバグの修正箇所（eventを使わず確実に要素を特定）
+    function switchTab(t, element) {
+      currentTab = t;
+      document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+      if(element) element.classList.add('active');
+      document.getElementById('mainFab').style.display = t === 'active' ? 'flex' : 'none';
+      renderList();
+    }
+
     function openDetailModal(card) {
       currentEditingCard = JSON.parse(JSON.stringify(card));
       document.getElementById('edit-status').value = currentEditingCard.status || 'wait';
@@ -260,38 +264,31 @@
       const audit = currentEditingCard.audit || {};
       const produce = currentEditingCard.produce || {};
 
-      // ★ 新旧プロンプト両対応のコメント表示
       document.getElementById('d-audit-comment').innerText = audit.commentary || audit.confidence_reason || '分析待ち...';
       document.getElementById('d-produce-comment').innerText = produce.commentary || produce.reason || '戦略構築待ち...';
 
-      // ★ 弱点とリスクの表示
       const alertBox = document.getElementById('d-alert-box');
       let alertHtml = '';
       if(currentEditingCard.weakness) alertHtml += `<div style="margin-bottom:4px;">💔 <b>競合の弱点・不満:</b> ${currentEditingCard.weakness}</div>`;
       if(audit.risk_flags && audit.risk_flags.length > 0) alertHtml += `<div>⚠️ <b>リスク:</b> ${audit.risk_flags.join(' / ')}</div>`;
       if(alertHtml) { alertBox.innerHTML = alertHtml; alertBox.style.display = 'block'; } else { alertBox.style.display = 'none'; }
 
-      // ★ チェックリスト
       const checks = audit.checks || [];
       document.getElementById('d-checks').innerHTML = checks.map(c => `<li><span style="font-weight:bold; color:${c.icon==='◎'?'#1e8e3e':c.icon==='○'?'#f57c00':'#d32f2f'}">${c.icon}</span> ${c.text}</li>`).join('');
       
-      // ★ ネクストアクション（復活！）
       const actions = audit.next_actions || [];
       document.getElementById('d-actions').innerHTML = actions.map(a => `<li>${a}</li>`).join('');
 
-      // ★ 差別化と画像構成（復活！）
       document.getElementById('d-produce-diff').innerText = produce.diff || currentEditingCard.diff || '特になし';
       const angles = produce.image_angles || [];
       document.getElementById('d-produce-angles').innerHTML = angles.map(a => `<li>${a}</li>`).join('');
 
-      // 1688キーワード
       if(currentEditingCard.supplier_keywords && currentEditingCard.supplier_keywords.length > 0) {
         document.getElementById('d-keywords').innerHTML = `💡 AI提案検索KW: <b style="color:#1565c0;">${currentEditingCard.supplier_keywords.join(' / ')}</b>`;
       } else {
         document.getElementById('d-keywords').innerHTML = '';
       }
 
-      // 利益計算
       const p = currentEditingCard.profit || {};
       const toN = (v) => parseInt(String(v).replace(/[^0-9]/g, '')) || 0;
       document.getElementById('calc-price').value = toN(p.price);
@@ -301,7 +298,6 @@
       calculateProfit();
       renderUrlList();
 
-      // 実績エリア
       const launchedArea = document.getElementById('launched-area');
       if (currentTab === 'launched') {
         launchedArea.style.display = 'block';
@@ -314,14 +310,13 @@
         launchedArea.style.display = 'none';
       }
 
-      // ボタン出し分け
       const btns = document.getElementById('action-buttons');
       btns.innerHTML = `<button class="btn btn-primary" onclick="saveUpdates()">💾 変更を保存</button>`;
       if(currentTab === 'active') {
         btns.innerHTML += `<button class="btn" style="background:#e6f4ea; color:#1e8e3e;" onclick="toggleLaunch(true)">🚀 商品化済みへ</button>`;
         btns.innerHTML += `<button class="btn" style="background:#ffebee; color:#d32f2f;" onclick="toggleArchive(true)">🗑️ アーカイブへ</button>`;
       } else if(currentTab === 'archived') {
-        btns.innerHTML += `<button class="btn" style="background:#e3f2fd;" onclick="toggleArchive(false)">♻️ リサーチへ戻す</button>`;
+        btns.innerHTML += `<button class="btn" style="background:#e3f2fd; color:#1e88e5;" onclick="toggleArchive(false)">♻️ リサーチへ戻す</button>`;
       } else if(currentTab === 'launched') {
         btns.innerHTML += `<button class="btn" style="background:#eee; color:#333;" onclick="toggleLaunch(false)">↩️ リサーチへ戻す</button>`;
       }
@@ -331,4 +326,26 @@
 
     function calculateProfit() {
       const v = (id) => parseInt(document.getElementById(id).value) || 0;
-      const net = v('calc-price')
+      const net = v('calc-price') - v('calc-cost') - v('calc-amazon') - v('calc-fba');
+      const el = document.getElementById('calc-net');
+      el.innerText = `¥${net.toLocaleString()}`;
+      el.style.color = net > 0 ? '#1e8e3e' : '#d32f2f';
+    }
+
+    function renderUrlList() {
+      const c = document.getElementById('url-list-container');
+      c.innerHTML = (currentEditingCard.urls || []).map((u, i) => `
+        <div style="background:#f0f7ff; padding:6px; border-radius:6px; margin-bottom:4px; display:flex; justify-content:space-between; font-size:12px;">
+          <a href="${u.url}" target="_blank" style="color:#007bff; text-decoration:none; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; max-width:80%;">${u.title}</a>
+          <span onclick="removeUrl(${i})" style="color:red; cursor:pointer; font-weight:bold; padding:0 8px;">×</span>
+        </div>`).join('');
+    }
+
+    function addUrl() {
+      const t = document.getElementById('new-url-title').value || 'リンク';
+      const u = document.getElementById('new-url-link').value;
+      if(!u) return;
+      if(!currentEditingCard.urls) currentEditingCard.urls = [];
+      currentEditingCard.urls.push({title:t, url:u});
+      document.getElementById('new-url-title').value = '';
+      document.getElementById('new-url-link').value = '';
