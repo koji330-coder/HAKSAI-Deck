@@ -199,8 +199,15 @@
     }
 
     function renderList() {
+      // 要素が存在する場合のみ非表示にするよう修正（エラー回避）
+      const loadingText = document.getElementById('loading');
+      if (loadingText) {
+        loadingText.style.display = 'none';
+      }
+
       const container = document.getElementById('cardList');
       container.innerHTML = '';
+      
       let filtered = allCards.filter(c => {
         if(currentTab === 'active') return !c.is_deleted && !c.is_launched;
         if(currentTab === 'launched') return c.is_launched;
