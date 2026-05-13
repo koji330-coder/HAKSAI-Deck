@@ -11,6 +11,7 @@
       --card-bg: #ffffff;
       --text-main: #333333;
       --text-sub: #888888;
+      --border-color: #e0e0e0;
       --status-go: #e6f4ea;
       --status-go-text: #1e8e3e;
       --status-check: #fff3e0;
@@ -18,113 +19,47 @@
       --status-wait: #eeeeee;
       --status-wait-text: #757575;
     }
-    body {
-      font-family: 'Helvetica Neue', Arial, sans-serif;
-      background-color: var(--bg-color);
-      margin: 0;
-      padding: 0;
-      color: var(--text-main);
-      padding-bottom: 80px; /* FABのスペース */
-    }
-    .header {
-      background: var(--card-bg);
-      padding: 16px 20px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-      position: sticky;
-      top: 0;
-      z-index: 10;
-    }
-    .header h1 {
-      margin: 0;
-      font-size: 20px;
-      font-weight: 800;
-      letter-spacing: 0.5px;
-    }
-    .container {
-      padding: 16px;
-    }
-    #loading {
-      text-align: center;
-      padding: 40px;
-      color: var(--text-sub);
-      font-size: 14px;
-    }
-    .card-list {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-    .card-item {
-      background: var(--card-bg);
-      padding: 16px;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-      display: flex;
-      align-items: flex-start;
-      cursor: pointer;
-      transition: transform 0.1s;
-    }
-    .card-item:active {
-      transform: scale(0.98);
-    }
-    .card-emoji {
-      font-size: 32px;
-      margin-right: 16px;
-      line-height: 1;
-    }
-    .card-info {
-      flex-grow: 1;
-      min-width: 0; /* テキスト省略に必要 */
-    }
-    .card-title {
-      font-weight: bold;
-      margin: 0 0 6px 0;
-      font-size: 15px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .card-summary {
-      font-size: 12px;
-      color: var(--text-sub);
-      margin: 0 0 8px 0;
-      line-height: 1.4;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-    .status-badge {
-      display: inline-block;
-      padding: 4px 10px;
-      border-radius: 20px;
-      font-size: 11px;
-      font-weight: bold;
-      text-transform: uppercase;
-    }
+    body { font-family: 'Helvetica Neue', Arial, sans-serif; background-color: var(--bg-color); margin: 0; padding: 0; color: var(--text-main); padding-bottom: 100px; }
+    .header { background: var(--card-bg); padding: 16px 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 10; }
+    .header h1 { margin: 0; font-size: 20px; font-weight: 800; letter-spacing: 0.5px; }
+    .container { padding: 16px; }
+    #loading { text-align: center; padding: 40px; color: var(--text-sub); font-size: 14px; }
+    
+    /* リスト部分のスタイル */
+    .card-list { display: flex; flex-direction: column; gap: 12px; }
+    .card-item { background: var(--card-bg); padding: 16px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); display: flex; align-items: flex-start; cursor: pointer; transition: transform 0.1s; }
+    .card-item:active { transform: scale(0.98); }
+    .card-emoji { font-size: 32px; margin-right: 16px; line-height: 1; }
+    .card-info { flex-grow: 1; min-width: 0; }
+    .card-title { font-weight: bold; margin: 0 0 6px 0; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .card-summary { font-size: 12px; color: var(--text-sub); margin: 0 0 8px 0; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .status-badge { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: bold; text-transform: uppercase; }
     .status-go { background: var(--status-go); color: var(--status-go-text); }
     .status-check { background: var(--status-check); color: var(--status-check-text); }
     .status-wait { background: var(--status-wait); color: var(--status-wait-text); }
     
-    /* 画面右下のフローティングボタン */
-    .fab {
-      position: fixed;
-      bottom: 24px;
-      right: 24px;
-      background: var(--primary);
-      color: white;
-      width: 56px;
-      height: 56px;
-      border-radius: 50%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 24px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-      border: none;
-      cursor: pointer;
-      z-index: 100;
-    }
+    /* フローティングボタン */
+    .fab { position: fixed; bottom: 24px; right: 24px; background: var(--primary); color: white; width: 56px; height: 56px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 28px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); border: none; cursor: pointer; z-index: 100; }
+    
+    /* モーダル共通スタイル */
+    .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 200; justify-content: center; align-items: flex-end; }
+    .modal-content { background: var(--card-bg); width: 100%; max-height: 90vh; border-radius: 20px 20px 0 0; padding: 24px; box-sizing: border-box; overflow-y: auto; animation: slideUp 0.3s ease-out; }
+    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+    
+    /* フォームスタイル */
+    .modal-content h2 { margin: 0 0 16px 0; font-size: 18px; }
+    .form-group { margin-bottom: 16px; background: #fafafa; padding: 12px; border-radius: 8px; border: 1px solid var(--border-color); }
+    .form-group label { display: block; font-size: 13px; font-weight: bold; margin-bottom: 8px; color: var(--text-main); }
+    .form-group input[type="file"] { font-size: 12px; width: 100%; }
+    .form-group select, .form-group input[type="text"] { width: 100%; padding: 8px; border: 1px solid var(--border-color); border-radius: 4px; font-size: 14px; box-sizing: border-box; background: #fff;}
+    
+    .btn-submit { background: var(--primary); color: white; border: none; padding: 14px; width: 100%; border-radius: 8px; font-size: 16px; font-weight: bold; margin-top: 16px; cursor: pointer; }
+    .btn-cancel { background: transparent; color: var(--text-sub); border: none; padding: 14px; width: 100%; font-size: 14px; margin-top: 8px; cursor: pointer; }
+    
+    /* ローディング用モーダル */
+    #loadingModal .modal-content { border-radius: 20px; align-self: center; width: 80%; text-align: center; padding: 40px 20px; }
+    .spinner { border: 4px solid rgba(0,0,0,0.1); width: 40px; height: 40px; border-radius: 50%; border-left-color: var(--primary); animation: spin 1s linear infinite; margin: 0 auto 16px auto; }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
   </style>
 </head>
 <body>
@@ -138,42 +73,92 @@
     <div class="card-list" id="cardList"></div>
   </div>
 
-  <button class="fab" id="addBtn" onclick="alert('ここに新規リサーチ（画像アップロード）画面を開く処理を実装します')">＋</button>
+  <button class="fab" onclick="openInputModal()">＋</button>
+
+  <div class="modal-overlay" id="inputModal">
+    <div class="modal-content">
+      <h2>新規リサーチ</h2>
+      
+      <div class="form-group" style="border-color: #4CAF50; background: #F1F8E9;">
+        <label>🛒 Amazon商品ページ (必須)</label>
+        <input type="file" id="img_amazon_main" accept="image/*">
+      </div>
+      
+      <div class="form-group">
+        <label>⭐ レビュー画像 (オプション)</label>
+        <input type="file" id="img_review" accept="image/*">
+      </div>
+      
+      <div class="form-group">
+        <label>📢 広告欄 (オプション)</label>
+        <input type="file" id="img_ad_competitors" accept="image/*">
+      </div>
+      
+      <div class="form-group">
+        <label>📦 ラクマート (オプション)</label>
+        <input type="file" id="img_rakumart" accept="image/*">
+      </div>
+
+      <h3>気づいたこと（任意）</h3>
+      <div class="form-group">
+        <label>中国品っぽい</label>
+        <select id="memo_china"><option value="不明">不明</option><option value="Yes">Yes</option><option value="No">No</option></select>
+      </div>
+      <div class="form-group">
+        <label>最近のレビューあり</label>
+        <select id="memo_recentReview"><option value="未確認">未確認</option><option value="あり">あり</option><option value="なし">なし</option></select>
+      </div>
+      <div class="form-group">
+        <label>広告競合の数</label>
+        <select id="memo_adCompetitor"><option value="未確認">未確認</option><option value="なし">なし</option><option value="少数">少数</option><option value="多数">多数</option></select>
+      </div>
+      <div class="form-group">
+        <label>月販数の目安</label>
+        <select id="memo_monthlySales"><option value="未確認">未確認</option><option value="〜50">〜50</option><option value="50〜100">50〜100</option><option value="100+">100+</option><option value="500+">500+</option></select>
+      </div>
+      <div class="form-group">
+        <label>メモ・特記事項</label>
+        <input type="text" id="memo_note" placeholder="差別化できそうなポイントなど">
+      </div>
+
+      <button class="btn-submit" onclick="submitAnalysis()">AIで分析する</button>
+      <button class="btn-cancel" onclick="closeInputModal()">キャンセル</button>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="loadingModal" style="align-items: center;">
+    <div class="modal-content">
+      <div class="spinner"></div>
+      <h3 style="margin:0 0 8px 0; font-size:18px;">AIが分析中...</h3>
+      <p style="margin:0; font-size:13px; color:#666;">画像を読み取っています<br>約10〜20秒かかります</p>
+    </div>
+  </div>
 
   <script>
-    // デプロイいただいたGASのWebアプリURL
     const GAS_URL = 'https://script.google.com/macros/s/AKfycbwN9FLhuYkK3Dn-1xh38ha2LPQVfyRItpS8D59bvv63UFsKfeXq9Cgin6ky9_HIsvCn/exec';
 
-    // 起動時にデータを取得
+    // 起動時のデータ取得
     async function fetchCards() {
+      document.getElementById('loading').style.display = 'block';
+      document.getElementById('cardList').innerHTML = '';
       try {
         const response = await fetch(`${GAS_URL}?action=getCards`);
         const json = await response.json();
-        
-        if (json.status === 'ok') {
-          renderList(json.cards);
-        } else {
-          document.getElementById('loading').innerText = 'データ取得エラー: ' + json.message;
-        }
+        if (json.status === 'ok') renderList(json.cards);
       } catch (err) {
         document.getElementById('loading').innerText = '通信エラーが発生しました。';
       }
     }
 
-    // リストを描画
+    // リスト描画
     function renderList(cards) {
       const listContainer = document.getElementById('cardList');
-      const loading = document.getElementById('loading');
-      
-      loading.style.display = 'none';
-      listContainer.innerHTML = '';
-      
+      document.getElementById('loading').style.display = 'none';
       if (!cards || cards.length === 0) {
         listContainer.innerHTML = '<div style="text-align:center; color:#888; padding: 20px;">データがありません。<br>右下の「＋」からリサーチを開始してください。</div>';
         return;
       }
 
-      // 新しいものが上に来るように逆順で表示
       cards.reverse().forEach(card => {
         const item = document.createElement('div');
         item.className = 'card-item';
@@ -181,32 +166,106 @@
         let statusClass = 'status-badge status-wait';
         if(card.status === 'go') statusClass = 'status-badge status-go';
         if(card.status === 'check') statusClass = 'status-badge status-check';
-        
-        // titleやsummaryが空の場合のプレースホルダー
-        const title = card.title || 'タイトルなし';
-        const summary = card.summary || 'サマリーデータがありません';
-        const emoji = card.emoji || '📦';
-        const status = card.status || 'wait';
 
         item.innerHTML = `
-          <div class="card-emoji">${emoji}</div>
+          <div class="card-emoji">${card.emoji || '📦'}</div>
           <div class="card-info">
-            <h3 class="card-title">${title}</h3>
-            <p class="card-summary">${summary}</p>
-            <span class="${statusClass}">${status}</span>
+            <h3 class="card-title">${card.title || 'タイトルなし'}</h3>
+            <p class="card-summary">${card.summary || 'サマリーなし'}</p>
+            <span class="${statusClass}">${card.status || 'wait'}</span>
           </div>
         `;
-        
-        // タップ時のアクション（あとで詳細モーダル表示に差し替えます）
-        item.onclick = () => {
-          alert(`【タップされました】\n${title}\n\n※この後、詳細画面（利益計算やAIの審査理由）が開くように実装します。`);
-        };
-        
+        item.onclick = () => alert(`【タップされました】\n${card.title}\n\n※この詳細画面は次のステップで実装します。`);
         listContainer.appendChild(item);
       });
     }
 
-    // 実行
+    // モーダル制御
+    function openInputModal() { document.getElementById('inputModal').style.display = 'flex'; }
+    function closeInputModal() { document.getElementById('inputModal').style.display = 'none'; }
+    function showLoading() { document.getElementById('loadingModal').style.display = 'flex'; }
+    function hideLoading() { document.getElementById('loadingModal').style.display = 'none'; }
+
+    // ファイルをBase64に変換するヘルパー関数
+    const fileToBase64 = (file) => new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result.split(',')[1]); // "data:image/jpeg;base64,"の部分をカット
+      reader.onerror = error => reject(error);
+    });
+
+    // 分析の実行
+    async function submitAnalysis() {
+      const mainImageInput = document.getElementById('img_amazon_main');
+      if (!mainImageInput.files || mainImageInput.files.length === 0) {
+        alert('Amazon商品ページの画像は必須です。');
+        return;
+      }
+
+      closeInputModal();
+      showLoading();
+
+      try {
+        const images = [];
+        const inputs = [
+          { id: 'img_amazon_main', role: 'amazon_main' },
+          { id: 'img_review', role: 'review' },
+          { id: 'img_ad_competitors', role: 'ad_competitors' },
+          { id: 'img_rakumart', role: 'rakumart' }
+        ];
+
+        // 画像の読み込み処理
+        for (const input of inputs) {
+          const fileElement = document.getElementById(input.id);
+          if (fileElement.files && fileElement.files.length > 0) {
+            const file = fileElement.files[0];
+            const base64Str = await fileToBase64(file);
+            images.push({ base64: base64Str, mimeType: file.type, role: input.role });
+          }
+        }
+
+        // メモの取得
+        const memo = {
+          china: document.getElementById('memo_china').value,
+          recentReview: document.getElementById('memo_recentReview').value,
+          adCompetitor: document.getElementById('memo_adCompetitor').value,
+          monthlySales: document.getElementById('memo_monthlySales').value,
+          note: document.getElementById('memo_note').value
+        };
+
+        // 1. Geminiへ分析リクエスト (POST)
+        const analyzeRes = await fetch(GAS_URL, {
+          method: 'POST',
+          body: JSON.stringify({ action: 'analyze', images: images, memo: memo })
+        });
+        const analyzeJson = await analyzeRes.json();
+        
+        if (analyzeJson.status !== 'ok') throw new Error(analyzeJson.message || '分析に失敗しました');
+
+        // 2. 結果をスプレッドシートに保存 (POST)
+        const saveRes = await fetch(GAS_URL, {
+          method: 'POST',
+          body: JSON.stringify({ action: 'saveCard', cardData: analyzeJson.data })
+        });
+        const saveJson = await saveRes.json();
+
+        if (saveJson.status !== 'ok') throw new Error('データの保存に失敗しました');
+
+        // 完了したらリストを再取得して画面更新
+        hideLoading();
+        // フォームのリセット
+        document.querySelectorAll('input[type="file"]').forEach(el => el.value = '');
+        document.getElementById('memo_note').value = '';
+        
+        fetchCards(); 
+
+      } catch (error) {
+        hideLoading();
+        alert('エラーが発生しました:\n' + error.message);
+      }
+    }
+
+    // 初期起動
     fetchCards();
   </script>
 
